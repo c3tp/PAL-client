@@ -1,5 +1,6 @@
 import sys
 import argparse
+import pal_client.client
 
 
 def main(args=None):
@@ -11,9 +12,10 @@ def main(args=None):
     print("It should do something interesting.")
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('command', help='pre_upload/pre_download/upload/download')
+    parser.add_argument('command', help='upload/download/symlink')
     parser.add_argument('bucket')
     parser.add_argument('key')
+    parser.add_argument('target')
     parser.add_argument('--username', default="lol", help='username help')
     parser.add_argument('--password', default="wut")
     parser.add_argument('--dummy-auth', default=True, action="store_true")
@@ -23,13 +25,18 @@ def main(args=None):
         # TODO(Andreas): We'll do real auth eventually
         return
 
-    result = {
-        'pre_upload': lambda b, k: pal_presigned.get_presigned_upload(client, b, k),
-        'pre_download': lambda b, k: pal_presigned.get_presigned_download(client, b, k)
-    }[args['command']](args['bucket'], args['key'])
-    return result
-    # Do argument parsing here (eg. with argparse) and anything else
-    # you want your project to do.
+    return {
+        'download': pal_client.client.download_file,
+        'upload': pal_client.client.upload_file,
+        'symlink': pal_client.client.symlink
+    }[args['command']](
+        args['bucket'],
+        args['key'],
+        args['username'],
+        args['password'],
+        args['target']
+        )
+
 
 if __name__ == "__main__":
     main()
