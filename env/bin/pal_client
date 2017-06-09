@@ -1,0 +1,12 @@
+#!/home/aabdi/Documents/C3TP/storage/pal-client/env/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'pal-client','console_scripts','pal_client'
+__requires__ = 'pal-client'
+import re
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('pal-client', 'console_scripts', 'pal_client')()
+    )
