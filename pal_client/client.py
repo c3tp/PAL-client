@@ -6,34 +6,33 @@ import requests
 TARGET_URL = 'http://localsite:5000'
 
 
-def download_file(b, k, username, password, target):
-    url = url_join(TARGET_URL, b, k, 'presigned_url')
+def download_file(**args):
+    url = url_join(TARGET_URL, args['bucket'], args['key'], 'presigned_url')
     response = requests.post(
         url=url,
         data={
-            'username': username,
-            'password': password
+            'username': args['username'],
+            'password': args['password']
         }
     )
     presigned_url = response.text
     response = requests.get(presigned_url)
-    with open(target, "wb") as target_file:
+    with open(args['target'], "wb") as target_file:
         target_file.write(response.content)
 
-    print("hi")
     return response
 
 
-def upload_file(b, k, username, password, target):
-    url = url_join(TARGET_URL, b, k, 'presigned_post')
+def upload_file(**args):
+    url = url_join(TARGET_URL, args['bucket'], args['key'], 'presigned_post')
     response = requests.post(
         url=url,
         data={
-            'username': username,
-            'password': password
+            'username': args['username'],
+            'password': args['password']
         }
     )
-    files = {"file": open(target, 'rb')}
+    files = {"file": open(args['target'], 'rb')}
     data = response.json()
     return requests.post(
         data["url"],
@@ -41,14 +40,15 @@ def upload_file(b, k, username, password, target):
         files=files)
 
 
-def symlink(b, k, username, password, target):
-    url = url_join(TARGET_URL, b, k, 'symlink')
+def symlink(**args):
+    url = url_join(TARGET_URL, args['bucket'], args['key'], 'symlink')
     return requests.post(
         url=url,
         data={
-            'username': username,
-            'password': password,
-            'target': target
+            'username': args['username'],
+            'password': args['password'],
+            'target': args['target'],
+            'mount_point': args['mount_point']
         }
     )
 
