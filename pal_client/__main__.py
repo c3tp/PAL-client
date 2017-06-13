@@ -19,6 +19,7 @@ def main(args=None):
     parser.add_argument('--username', default="lol", help='username help')
     parser.add_argument('--password', default="wut")
     parser.add_argument('--dummy-auth', default=True, action="store_true")
+    parser.add_argument('--mount-point')
     args = vars(parser.parse_args())
     print("Hi! we tried parsing")
     if args['dummy_auth'] is False:
@@ -29,13 +30,7 @@ def main(args=None):
         'download': pal_client.client.download_file,
         'upload': pal_client.client.upload_file,
         'symlink': pal_client.client.symlink
-    }[args['command']](
-        args['bucket'],
-        args['key'],
-        args['username'],
-        args['password'],
-        args['target']
-        )
+    }[args['command']](**args)
 
 
 if __name__ == "__main__":
