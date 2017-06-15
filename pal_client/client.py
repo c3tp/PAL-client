@@ -17,7 +17,7 @@ def download_file(**args):
         verify=False
     )
     presigned_url = response.text
-    response = requests.get(presigned_url)
+    response = requests.get(presigned_url, verify=False)
     with open(args['target'], "wb") as target_file:
         target_file.write(response.content)
 
@@ -36,12 +36,10 @@ def upload_file(**args):
         },
         verify=False
     )
-    files = {"file": open(args['target'], 'rb')}
     presigned_url = response.text
-    return requests.post(
-        presigned_url,
-        files=files,
-        verify=False)
+    with open(args['target'], 'rb') as data_in:
+        upload = requests.put(presigned_url, data=data_in.read(), verify=False)
+        upload.close()
 
 
 def presigned_get(**args):

@@ -31,7 +31,7 @@ def main(args=None):
         'download': pal_client.client.download_file,
         'upload': pal_client.client.upload_file,
         'symlink': pal_client.client.symlink,
-        'presigned_get': pal_client.client.presigned_url,
+        'presigned_get': pal_client.client.presigned_get,
         'presigned_post': pal_client.client.presigned_post
     }[args['command']](**args)
     return result
