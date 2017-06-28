@@ -40,10 +40,39 @@ def upload_file(**args):
     with open(args['target'], 'rb') as data_in:
         upload = requests.put(presigned_url, data=data_in.read(), verify=False)
         upload.close()
+    return response
 
 
 def presigned_get(**args):
     url = url_join(args['target_url'], args['bucket'], args['key'], 'presigned_get')
+    response = requests.post(
+        url=url,
+        data={
+            'username': args['username'],
+            'password': args['password']
+        },
+        verify=False
+    )
+
+    return response.text
+
+
+def restrict(**args):
+    url = url_join(args['target_url'], args['bucket'], args['key'], 'restrict')
+    response = requests.post(
+        url=url,
+        data={
+            'username': args['username'],
+            'password': args['password']
+        },
+        verify=False
+    )
+
+    return response.text
+
+
+def release(**args):
+    url = url_join(args['target_url'], args['bucket'], args['key'], 'release')
     response = requests.post(
         url=url,
         data={
