@@ -32,7 +32,9 @@ def main(args=None):
         'upload': pal_client.client.upload_file,
         'symlink': pal_client.client.symlink,
         'presigned_get': pal_client.client.presigned_get,
-        'presigned_post': pal_client.client.presigned_post
+        'presigned_post': pal_client.client.presigned_post,
+        'restrict': pal_client.client.restrict,
+        'release': pal_client.client.release
     }[args['command']](**args)
     return result
 
